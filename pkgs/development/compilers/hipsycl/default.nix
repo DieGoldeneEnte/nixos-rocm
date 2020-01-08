@@ -16,9 +16,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake python3 ];
   buildInputs = [ clang openmp llvm hipCPU ];
   cmakeFlags = [
-    "-DCLANG_INCLUDE_PATH=${clang-unwrapped}/lib/clang/${stdenv.lib.getVersion clang-unwrapped}/include"
+    "-DCLANG_INCLUDE_PATH=${clang}/resource-root/include"
     "-DWITH_CUDA_BACKEND=NO"
-    "-DWITH_ROCM_BACKEND=YES"
+    "-DWITH_ROCM_BACKEND=NO"
     "-DROCM_PATH=${device-libs}"
   ];
   propagatedBuildInputs = [ hip rocr ];
