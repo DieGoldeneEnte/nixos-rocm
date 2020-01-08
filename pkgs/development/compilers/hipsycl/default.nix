@@ -23,6 +23,8 @@ stdenv.mkDerivation rec {
   ];
   propagatedBuildInputs = [ hip rocr ];
 
+  NIX_TARGET_CFLAGS_COMPILE=" -isystem ${clang-unwrapped}/include";
+
   prePatch = ''
     patchShebangs bin
     mkdir -p contrib

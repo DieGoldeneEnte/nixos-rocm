@@ -511,22 +511,30 @@ with pkgs;
   });
 
   hipCPU = callPackage ./development/compilers/hipsycl/hipCPU.nix { };
-  hipsycl = callPackage ./development/compilers/hipsycl {
-    stdenv = pkgs.overrideCC pkgs.clangStdenv self.amd-clang;
+  amd-hipsycl = callPackage ./development/compilers/hipsycl {
     inherit (self) hipCPU;
     # hip = self.hip-clang;
+
+    stdenv = pkgs.overrideCC pkgs.clangStdenv self.amd-clang;
     hip = self.hip;
     clang = self.amd-clang;
     clang-unwrapped = self.amd-clang-unwrapped;
     llvm = self.amd-llvm;
     openmp = self.amd-openmp;
 
+    device-libs = self.amd-device-libs;
+  };
+
+  hipsycl = callPackage ./development/compilers/hipsycl {
+    inherit (self) hipCPU;
+
     # LLVM from nixpkgs is missing include/llvm/Support/Alignment.h
-    #stdenv = pkgs.overrideCC pkgs.clangStdenv pkgs.clang_8;
-    #clang = pkgs.clang_8;
-    #clang-unwrapped = pkgs.llvmPackages_8.clang-unwrapped;
-    #llvm = pkgs.llvmPackages_8.llvm;
-    #openmp = pkgs.llvmPackages_8.openmp;
+    stdenv = pkgs.overrideCC pkgs.clangStdenv pkgs.llvmPackages_9.clang;
+    clang = pkgs.llvmPackages_9.clang;
+    clang-unwrapped = pkgs.llvmPackages_9.clang-unwrapped;
+    llvm = pkgs.llvmPackages_9.llvm;
+    openmp = pkgs.llvmPackages_9.openmp;
+
 
     device-libs = self.amd-device-libs;
     #cudatoolkit = cudatoolkit_9_0;
