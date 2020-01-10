@@ -12,13 +12,14 @@ stdenv.mkDerivation rec {
     rev = "11557a155f576b8cbf504ac8f0151d19b77f54dd";
     sha256 = "0n5qgypyx8qs43y18j1drnanhy7al7namhxn0yzgdws6z7lxsnyz";
   };
+  #src = /mnt/Media/git/hipSYCL;
 
   nativeBuildInputs = [ cmake python3 ];
   buildInputs = [ clang openmp llvm hipCPU ];
   cmakeFlags = [
     "-DCLANG_INCLUDE_PATH=${clang}/resource-root/include"
     "-DWITH_CUDA_BACKEND=NO"
-    "-DWITH_ROCM_BACKEND=NO"
+    "-DWITH_ROCM_BACKEND=YES"
     "-DROCM_PATH=${device-libs}"
   ];
   propagatedBuildInputs = [ hip rocr ];
