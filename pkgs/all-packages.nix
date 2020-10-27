@@ -271,6 +271,29 @@ with pkgs;
     '';
   });
 
+  hipCPU = callPackage ./development/compilers/hipsycl/hipCPU.nix {};
+
+  hipsycl-stable = callPackage ./development/compilers/hipsycl/stable.nix {
+    llvmPackages = pkgs.llvmPackages_10;
+    hipCPU = self.hipCPU;
+  };
+
+  hipsycl-develop = callPackage ./development/compilers/hipsycl/develop.nix {
+    llvmPackages = pkgs.llvmPackages_10;
+  };
+
+  hipsycl-test-cpu = callPackage ./development/compilers/hipsycl/tests.nix {
+    hipsycl = self.hipsycl-develop;
+    boost = pkgs.boost172;
+  };
+
+  hipsycl-test-rocm = callPackage ./development/compilers/hipsycl/tests.nix {
+    hipsycl = self.hipsycl-develop;
+    boost = pkgs.boost172;
+    hipsycl_platform = "rocm";
+    hipsycl_gpu_arch = "${builtins.elemAt config.rocmTargets 0}";
+  };
+
   # Deprecated names
   rocm-clang = builtins.trace "'rocm-clang' was renamed to 'llvmPackages_rocm.clang'" self.llvmPackages_rocm.clang;
   rocm-clang-unwrapped = builtins.trace "'rocm-clang-unwrapped' was renamed to 'llvmPackages_rocm.clang-unwrapped'" self.llvmPackages_rocm.clang-unwrapped;
